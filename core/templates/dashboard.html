@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | VetSystem{% endblock %}
+
+{% block page_title %}Dashboard{% endblock %}
+{% block page_subtitle %}Bienvenido al sistema{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <!-- Tarjetas de estadísticas -->
+    <div class="col-md-3">
+        <div class="card stat-card primary">
+            <div class="card-body">
+                <h5>Total Clientes</h5>
+                <h2>{{ stats.total_clientes }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card stat-card success">
+            <div class="card-body">
+                <h5>Total Mascotas</h5>
+                <h2>{{ stats.total_mascotas }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card stat-card warning">
+            <div class="card-body">
+                <h5>Citas Hoy</h5>
+                <h2>{{ stats.citas_hoy }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card stat-card danger">
+            <div class="card-body">
+                <h5>Consultas este mes</h5>
+                <h2>{{ stats.consultas_mes }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<h4>Citas para Hoy</h4>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Hora</th>
+            <th>Mascota</th>
+            <th>Cliente</th>
+            <th>Veterinario</th>
+            <th>Estado</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for cita in citas_hoy %}
+        <tr>
+            <td>{{ cita.fecha_hora|date:"H:i" }}</td>
+            <td>{{ cita.mascota.nombre }}</td>
+            <td>{{ cita.mascota.cliente.nombre }} {{ cita.mascota.cliente.apellido }}</td>
+            <td>{{ cita.veterinario.nombre }}</td>
+            <td>{{ cita.estado }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5" class="text-center">No hay citas hoy</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

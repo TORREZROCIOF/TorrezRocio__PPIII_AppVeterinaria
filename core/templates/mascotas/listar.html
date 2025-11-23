@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block page_title %}Mascotas{% endblock %}
+{% block page_subtitle %}Listado completo{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="mb-0"><i class="fas fa-paw me-2"></i> Mascotas</h3>
+    <a href="{% url 'mascota_crear' %}" class="btn btn-primary btn-custom">
+        <i class="fas fa-plus"></i> Nueva Mascota
+    </a>
+</div>
+
+<div class="card p-3">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Cliente</th>
+                    <th>Especie</th>
+                    <th>Estado</th>
+                    <th class="text-center">Opciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for mascota in mascotas %}
+                <tr>
+                    <td>{{ mascota.id }}</td>
+                    <td>{{ mascota.nombre }}</td>
+                    <td>{{ mascota.cliente.nombre }} {{ mascota.cliente.apellido }}</td>
+                    <td>{{ mascota.get_especie_display }}</td>
+                    <td>
+                        {% if mascota.estado == 'activo' %}
+                            <span class="badge bg-success">Activo</span>
+                        {% elif mascota.estado == 'fallecido' %}
+                            <span class="badge bg-danger">Fallecido</span>
+                        {% else %}
+                            <span class="badge bg-warning">Transferido</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-center">
+                        <a href="{% url 'mascota_editar' mascota.id %}" class="btn btn-sm btn-warning">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <a href="{% url 'mascota_listar' %}" class="btn btn-sm btn-info">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center text-muted py-3">
+                        No hay mascotas registradas.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+</div>
+
+{% endblock %}

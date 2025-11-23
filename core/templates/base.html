@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Sistema Veterinaria{% endblock %}</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --sidebar-width: 250px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: var(--sidebar-width);
+            background: linear-gradient(135deg, var(--primary-color), #34495e);
+            color: white;
+            padding: 20px 0;
+            z-index: 1000;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .sidebar .logo {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+
+        .sidebar .logo h3 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .sidebar .logo i {
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+        }
+
+        .sidebar .nav-link {
+            color: rgba(255,255,255,0.8);
+            padding: 12px 25px;
+            margin: 5px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar .nav-link:hover {
+            background-color: rgba(52, 152, 219, 0.2);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .sidebar .nav-link.active {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .sidebar .nav-link i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+            width: 25px;
+        }
+
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .top-bar {
+            background: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--secondary-color), #5dade2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .stat-card {
+            padding: 25px;
+            border-left: 4px solid;
+        }
+
+        .stat-card.primary {
+            border-left-color: var(--primary-color);
+        }
+
+        .stat-card.success {
+            border-left-color: var(--success-color);
+        }
+
+        .stat-card.warning {
+            border-left-color: var(--warning-color);
+        }
+
+        .stat-card.danger {
+            border-left-color: var(--danger-color);
+        }
+
+        .stat-card .icon {
+            font-size: 2.5rem;
+            opacity: 0.3;
+        }
+
+        .btn-custom {
+            border-radius: 8px;
+            padding: 10px 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .table {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .table thead {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 0;
+                padding: 0;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    {% if user.is_authenticated %}
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-paw"></i>
+            <h3>VetSystem</h3>
+            <small>Gestión Veterinaria</small>
+        </div>
+        
+        <nav class="nav flex-column">
+            <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% url 'dashboard' %}">
+                <i class="fas fa-home"></i> Inicio
+            </a>
+            <a class="nav-link {% if 'clientes' in request.path %}active{% endif %}" href="{% url 'cliente_listar' %}">
+                <i class="fas fa-users"></i> Clientes
+            </a>
+            <a class="nav-link {% if 'mascotas' in request.path %}active{% endif %}" href="{% url 'mascota_listar' %}">
+                <i class="fas fa-paw"></i> Mascotas
+            </a>
+            <a class="nav-link {% if 'citas' in request.path %}active{% endif %}" href="{% url 'cita_listar' %}">
+                <i class="fas fa-calendar-check"></i> Citas
+            </a>
+            <a class="nav-link" href="#consultas">
+                <i class="fas fa-stethoscope"></i> Consultas
+            </a>
+            <a class="nav-link" href="#vacunas">
+                <i class="fas fa-syringe"></i> Vacunas
+            </a>
+            
+            <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 15px;">
+            
+            <a class="nav-link" href="{% url 'logout' %}">
+                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+            </a>
+        </nav>
+    </div>
+    {% endif %}
+
+    <!-- Main Content -->
+    <div class="{% if user.is_authenticated %}main-content{% else %}container{% endif %}">
+        {% if user.is_authenticated %}
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div>
+                <h4 class="mb-0">{% block page_title %}Dashboard{% endblock %}</h4>
+                <small class="text-muted">{% block page_subtitle %}Bienvenido al sistema{% endblock %}</small>
+            </div>
+            
+            <div class="user-info">
+                <div>
+                    <strong>{{ user.nombre }}</strong>
+                    <br>
+                    <small class="text-muted">{{ user.get_rol_display }}</small>
+                </div>
+                <div class="user-avatar">
+                    {{ user.nombre|first|upper }}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Messages -->
+        {% if messages %}
+        <div class="mb-3">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-circle{% else %}info-circle{% endif %} me-2"></i>
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Content -->
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- jQuery (opcional) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block page_title %}Crear Cita{% endblock %}
+{% block content %}
+
+<div class="card p-4">
+
+    <h3 class="mb-3">Crear Cita</h3>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="row">
+
+            <div class="col-md-6 mb-3">
+                <label>Mascota</label>
+                <select name="mascota" class="form-select" required>
+                    <option value="">Seleccione...</option>
+                    {% for m in mascotas %}
+                    <option value="{{ m.id }}">{{ m.nombre }} - {{ m.cliente.nombre }} {{ m.cliente.apellido }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label>Veterinario</label>
+                <!-- <select name="veterinario" class="form-select" required>
+                    <option value="">Seleccione...</option>
+                    {% for v in veterinarios %}
+                    <option value="{{ v.id }}">{{ v.nombre }}</option>
+                    {% endfor %}
+                </select> -->
+                <input type="text" name="veterinario" class="form-control" required>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label>Fecha y hora</label>
+                <input type="datetime-local" name="fecha_hora" class="form-control" required>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label>Duración (minutos)</label>
+                <input type="number" name="duracion_minutos" class="form-control" value="30" required>
+            </div>
+
+            <div class="col-md-12 mb-3">
+                <label>Motivo</label>
+                <input type="text" name="motivo" class="form-control" required>
+            </div>
+
+            <div class="col-md-12 mb-3">
+                <label>Observaciones</label>
+                <textarea name="observaciones" class="form-control"></textarea>
+            </div>
+
+        </div>
+
+        <button class="btn btn-success mt-2">Crear Cita</button>
+        <a href="{% url 'cita_listar' %}" class="btn btn-secondary mt-2 ms-2">Volver</a>
+
+    </form>
+
+</div>
+
+{% endblock %}

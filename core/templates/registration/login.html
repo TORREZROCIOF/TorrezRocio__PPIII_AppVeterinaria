@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Iniciar Sesión – Veterinaria{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-5">
+        <div class="card shadow-lg border-0">
+            <div class="card-body p-4">
+
+                <h3 class="text-center mb-3">
+                    <i class="fas fa-paw text-primary"></i> Iniciar Sesión
+                </h3>
+
+                <p class="text-center text-muted mb-4">Accede al sistema veterinario</p>
+
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input 
+                            type="email" 
+                            class="form-control" 
+                            id="email"
+                            name="email"
+                            placeholder="ejemplo@mail.com"
+                            required
+                        >
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Contraseña</label>
+                        <input 
+                            type="password" 
+                            class="form-control" 
+                            id="password"
+                            name="password"
+                            required
+                        >
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 mt-3">
+                        <i class="fas fa-sign-in-alt"></i> Entrar
+                    </button>
+                </form>
+
+            </div>
+        </div>
+
+        <p class="text-center text-muted mt-3">
+            © {{ year|default:2024 }} VetSystem
+        </p>
+    </div>
+</div>
+
+{% endblock %}
